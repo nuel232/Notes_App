@@ -3,7 +3,7 @@ import 'package:isar/isar.dart';
 import 'package:note_app/models/note.dart';
 import 'package:path_provider/path_provider.dart';
 
-class NoteDatabase {
+class NoteDatabase extends ChangeNotifier {
   static late Isar isar;
   // I N I T I A L I Z E - D A T A B A S E
   static Future<void> initialize() async {
@@ -31,6 +31,7 @@ class NoteDatabase {
     List<Note> fetchedNotes = await isar.notes.where().findAll();
     currentNotes.clear();
     currentNotes.addAll(fetchedNotes);
+    notifyListeners();
   }
 
   // U P D A T E
