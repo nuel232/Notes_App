@@ -7,7 +7,9 @@ class NoteDatabase extends ChangeNotifier {
   static late Isar isar;
   // I N I T I A L I Z E - D A T A B A S E
   static Future<void> initialize() async {
+    //this is to know to directory of where it is going to be saved
     final dir = await getApplicationDocumentsDirectory();
+
     isar = await Isar.open([NoteSchema], directory: dir.path);
   }
 
@@ -28,7 +30,9 @@ class NoteDatabase extends ChangeNotifier {
 
   // R E A D
   Future<void> fetchNotes() async {
+    //this will grab all this notes in the database
     List<Note> fetchedNotes = await isar.notes.where().findAll();
+
     currentNotes.clear();
     currentNotes.addAll(fetchedNotes);
     notifyListeners();

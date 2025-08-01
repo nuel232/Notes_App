@@ -6,7 +6,9 @@ part 'note.g.dart';
 
 @Collection()
 class Note {
+  //this will auto increment the id
   Id id = Isar.autoIncrement;
-  late String
-  text; //this late tag is there cause we are going to initialize it later
+
+  //this late tag is there cause we are going to initialize it later
+  late String text;
 }

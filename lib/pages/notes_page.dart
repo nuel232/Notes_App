@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:note_app/models/note.dart';
 import 'package:note_app/models/note_database.dart';
 import 'package:provider/provider.dart';
@@ -101,33 +102,47 @@ class _NotesPageState extends State<NotesPage> {
         onPressed: createNote,
         child: Icon(Icons.add),
       ),
-      body: ListView.builder(
-        itemCount: currentNotes.length,
-        itemBuilder: (context, index) {
-          //get individual note
-          final note = currentNotes[index];
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //HEADING
+          Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Text('Notes', style: GoogleFonts.dmSerifText()),
+          ),
 
-          //list tile UI
-          return ListTile(
-            title: Text('note.text'),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                //edit button
-                IconButton(
-                  onPressed: () => updateNote(note),
-                  icon: Icon(Icons.edit),
-                ),
+          //LIST OF NOTES
+          Expanded(
+            child: ListView.builder(
+              itemCount: currentNotes.length,
+              itemBuilder: (context, index) {
+                //get individual note
+                final note = currentNotes[index];
 
-                //delete button
-                IconButton(
-                  onPressed: () => deleteNote(note.id),
-                  icon: Icon(Icons.delete),
-                ),
-              ],
+                //list tile UI
+                return ListTile(
+                  title: Text('note.text'),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      //edit button
+                      IconButton(
+                        onPressed: () => updateNote(note),
+                        icon: Icon(Icons.edit),
+                      ),
+
+                      //delete button
+                      IconButton(
+                        onPressed: () => deleteNote(note.id),
+                        icon: Icon(Icons.delete),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
