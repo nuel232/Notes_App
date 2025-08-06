@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:note_app/models/note.dart';
-import 'package:note_app/models/note_database.dart';
+
 import 'package:provider/provider.dart';
+
+import '../models/note.dart';
+import '../models/note_database.dart';
 
 class NotesPage extends StatefulWidget {
   const NotesPage({super.key});
@@ -56,28 +58,25 @@ class _NotesPageState extends State<NotesPage> {
   void updateNote(Note note) {
     //pre-fill the current note text
     textController.text = note.text;
+    final noteDatabase = context.read<NoteDatabase>();
+    final index = noteDatabase.getNoteIndex(note);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text('Update Note'),
         content: TextField(controller: textController),
-
         actions: [
           //update button
           MaterialButton(
             onPressed: () {
               //update note in db
-              context.read<NoteDatabase>().updateNote(
-                note.id,
-                textController.text,
-              );
-
+              noteDatabase.updateNote(index, textController.text);
               //clear controller
               textController.clear();
-
               //pop dialog box
               Navigator.pop(context);
             },
+            child: Text('Update'),
           ),
         ],
       ),
@@ -85,8 +84,10 @@ class _NotesPageState extends State<NotesPage> {
   }
 
   //delete a note
-  void deleteNote(int id) {
-    context.read<NoteDatabase>().deleteNote(id);
+  void deleteNote(Note note) {
+    final noteDatabase = context.read<NoteDatabase>();
+    final index = noteDatabase.getNoteIndex(note);
+    noteDatabase.deleteNote(index);
   }
 
   @override
@@ -121,7 +122,7 @@ class _NotesPageState extends State<NotesPage> {
 
                 //list tile UI
                 return ListTile(
-                  title: Text('note.text'),
+                  title: Text(note.text),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -133,7 +134,7 @@ class _NotesPageState extends State<NotesPage> {
 
                       //delete button
                       IconButton(
-                        onPressed: () => deleteNote(note.id),
+                        onPressed: () => deleteNote(note),
                         icon: Icon(Icons.delete),
                       ),
                     ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:note_app/theme/theme.dart';
+
+import 'theme.dart';
 
 class ThemeProvider with ChangeNotifier {
   //initially, theme is light mode

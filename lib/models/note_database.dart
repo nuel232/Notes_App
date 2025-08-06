@@ -1,56 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:isar/isar.dart';
-import 'package:note_app/models/note.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'note.dart';
 
 class NoteDatabase extends ChangeNotifier {
-  static late Isar isar;
-  // I N I T I A L I Z E - D A T A B A S E
+  static late Box<Note> _notesBox;
+
+  // Initialize Hive and open the notes box
   static Future<void> initialize() async {
-    //this is to know to directory of where it is going to be saved
-    final dir = await getApplicationDocumentsDirectory();
-
-    isar = await Isar.open([NoteSchema], directory: dir.path);
+    await Hive.initFlutter();
+    Hive.registerAdapter(NoteAdapter());
+    _notesBox = await Hive.openBox<Note>('notes');
   }
 
-  //final list of notes
-  final List<Note> currentNotes = [];
+  // Getter for current notes
+  List<Note> get currentNotes => _notesBox.values.toList();
 
-  // C R E A T E
+  // Create
   Future<void> addNote(String textFromUser) async {
-    //create a new note object
-    final newNote = Note()..text = textFromUser;
-
-    //save to db
-    await isar.writeTxn(() => isar.notes.put(newNote));
-
-    //re-read from db
-    fetchNotes();
-  }
-
-  // R E A D
-  Future<void> fetchNotes() async {
-    //this will grab all this notes in the database
-    List<Note> fetchedNotes = await isar.notes.where().findAll();
-
-    currentNotes.clear();
-    currentNotes.addAll(fetchedNotes);
+    final newNote = Note(text: textFromUser);
+    await _notesBox.add(newNote);
     notifyListeners();
   }
 
-  // U P D A T E
-  Future<void> updateNote(int id, String newText) async {
-    final existingNote = await isar.notes.get(id);
-    if (existingNote != null) {
-      existingNote.text = newText;
-      await isar.writeTxn(() => isar.notes.put(existingNote));
-      await fetchNotes();
+  // Update
+  Future<void> updateNote(int index, String newText) async {
+    final note = _notesBox.getAt(index);
+    if (note != null) {
+      note.text = newText;
+      await note.save();
+      notifyListeners();
     }
   }
 
-  // D E L E T E
-  Future<void> deleteNote(int id) async {
-    await isar.writeTxn(() => isar.notes.delete(id));
-    await fetchNotes();
+  // Delete
+  Future<void> deleteNote(int index) async {
+    await _notesBox.deleteAt(index);
+    notifyListeners();
+  }
+
+  // Helper to get note index
+  int getNoteIndex(Note note) {
+    return _notesBox.values.toList().indexOf(note);
   }
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:note_app/models/note_database.dart';
-import 'package:note_app/pages/notes_page.dart';
-import 'package:note_app/theme/theme_provider.dart';
+
 import 'package:provider/provider.dart';
+
+import 'models/note_database.dart';
+import 'pages/notes_page.dart';
+import 'theme/theme_provider.dart';
 
 void main() async {
   //initialize note isar database

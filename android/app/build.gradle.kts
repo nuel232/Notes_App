@@ -8,9 +8,9 @@ plugins {
 android {
     namespace = "com.example.note_app"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "29.0.13599879"
 
-    compileOptions {
+    compileOptions {    
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
