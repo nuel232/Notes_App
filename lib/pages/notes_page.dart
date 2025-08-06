@@ -59,7 +59,6 @@ class _NotesPageState extends State<NotesPage> {
     //pre-fill the current note text
     textController.text = note.text;
     final noteDatabase = context.read<NoteDatabase>();
-    final index = noteDatabase.getNoteIndex(note);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -69,6 +68,7 @@ class _NotesPageState extends State<NotesPage> {
           //update button
           MaterialButton(
             onPressed: () {
+              final index = noteDatabase.getNoteIndex(note);
               //update note in db
               noteDatabase.updateNote(index, textController.text);
               //clear controller

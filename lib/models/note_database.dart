@@ -42,4 +42,9 @@ class NoteDatabase extends ChangeNotifier {
   int getNoteIndex(Note note) {
     return _notesBox.values.toList().indexOf(note);
   }
+
+  // Fetch notes (for compatibility with previous code)
+  void fetchNotes() {
+    notifyListeners();
+  }
 }
