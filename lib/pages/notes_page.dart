@@ -22,6 +22,7 @@ class _NotesPageState extends State<NotesPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.surface,
         content: TextField(controller: textController),
         actions: [
           //create button
@@ -50,6 +51,7 @@ class _NotesPageState extends State<NotesPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.surface,
         title: Text('Update Note'),
         content: TextField(controller: textController),
         actions: [
@@ -117,8 +119,8 @@ class _NotesPageState extends State<NotesPage> {
                 //list tile UI
                 return NoteTile(
                   text: note.text,
-                  onDeletePressed: () => updateNote(note),
-                  onEditPressed: () => deleteNote(note),
+                  onDeletePressed: () => deleteNote(note),
+                  onEditPressed: () => updateNote(note),
                 );
               },
             ),
