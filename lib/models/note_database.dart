@@ -22,6 +22,11 @@ class NoteDatabase extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Read - No operation needed since we use getter
+  void fetchNotes() {
+    // No operation needed - the getter provides real-time data
+  }
+
   // Update
   Future<void> updateNote(int index, String newText) async {
     final note = _notesBox.getAt(index);
@@ -41,10 +46,5 @@ class NoteDatabase extends ChangeNotifier {
   // Helper to get note index
   int getNoteIndex(Note note) {
     return _notesBox.values.toList().indexOf(note);
-  }
-
-  // Fetch notes (for compatibility with previous code)
-  void fetchNotes() {
-    notifyListeners();
   }
 }

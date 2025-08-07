@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:notw/components/my_drawer.dart';
+import 'package:notw/components/note_tile.dart';
 import 'package:provider/provider.dart';
-
 import '../models/note.dart';
 import '../models/note_database.dart';
 
@@ -16,13 +16,6 @@ class NotesPage extends StatefulWidget {
 class _NotesPageState extends State<NotesPage> {
   //text controller to access what the user typed
   final textController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    //on app startup we can fetch the existing note
-    readNotes();
-  }
 
   // create a note
   void createNote() {
@@ -47,11 +40,6 @@ class _NotesPageState extends State<NotesPage> {
         ],
       ),
     );
-  }
-
-  //R E A D
-  void readNotes() {
-    context.read<NoteDatabase>().fetchNotes();
   }
 
   //update a note
@@ -98,18 +86,24 @@ class _NotesPageState extends State<NotesPage> {
     //current notes
     List<Note> currentNotes = noteDatabase.currentNotes;
     return Scaffold(
-      appBar: AppBar(title: Text('Notes')),
+      appBar: AppBar(),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: FloatingActionButton(
         onPressed: createNote,
-        child: Icon(Icons.add),
+        shape: CircleBorder(),
+        child: Icon(
+          Icons.add,
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
       ),
+      drawer: MyDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           //HEADING
           Padding(
             padding: const EdgeInsets.all(25.0),
-            child: Text('Notes', style: GoogleFonts.dmSerifText()),
+            child: Text('Notes', style: GoogleFonts.dmSerifText(fontSize: 48)),
           ),
 
           //LIST OF NOTES
@@ -121,24 +115,10 @@ class _NotesPageState extends State<NotesPage> {
                 final note = currentNotes[index];
 
                 //list tile UI
-                return ListTile(
-                  title: Text(note.text),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      //edit button
-                      IconButton(
-                        onPressed: () => updateNote(note),
-                        icon: Icon(Icons.edit),
-                      ),
-
-                      //delete button
-                      IconButton(
-                        onPressed: () => deleteNote(note),
-                        icon: Icon(Icons.delete),
-                      ),
-                    ],
-                  ),
+                return NoteTile(
+                  text: note.text,
+                  onDeletePressed: () => updateNote(note),
+                  onEditPressed: () => deleteNote(note),
                 );
               },
             ),
