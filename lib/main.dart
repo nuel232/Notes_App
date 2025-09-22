@@ -7,7 +7,7 @@ import 'pages/notes_page.dart';
 import 'theme/theme_provider.dart';
 
 void main() async {
-  //initialize note isar database
+  //initialize note Hive database
   WidgetsFlutterBinding.ensureInitialized();
   await NoteDatabase.initialize();
 
